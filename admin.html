@@ -59,18 +59,19 @@
               </el-table-column>
               <el-table-column
                 label="preview"
-                prop="preview">
+                prop="preview"
+                align="center">
                 <template slot-scope="scope">
                   <video v-if="scope.row.name.indexOf('.mp4')>0" style="width: 100%; height: 100%;" controls>
                     <source :src="'/file/'+scope.row.name" type="video/mp4">
                   </video>
                   <el-image
                     v-else
-                    style="width: 100%; height: 100%;"
+                    style="height: 250px;"
                     :src="'/file/'+scope.row.name"
                     :zoom-rate="1.2"
                     :preview-src-list="['/file/'+scope.row.name]"
-                    fit="cover"
+                    fit="contain"
                     lazy
                   />
 
@@ -97,6 +98,9 @@
                     placeholder="输入关键字搜索"/>
                 </template>
                 <template slot-scope="scope">
+                  <el-button
+                    size="mini"
+                    @click="handleCopy(scope.$index,scope.row.name)">Copy URL</el-button>
                   <el-button
                     size="mini"
                     type="primary"
@@ -200,6 +204,10 @@
         console.log("No")
       }
 
+      },
+      handleCopy(index,key) {
+        const uri = 'https://' + window.location.host + '/file/' + key;
+        navigator.clipboard.writeText(uri);
       },
       handleLogout(){
         window.location.href="./api/manage/logout";
